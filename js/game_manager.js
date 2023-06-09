@@ -212,7 +212,7 @@ GameManager.prototype.move = function (direction) {
           tile.updatePosition(positions.next);
 
           // Update the score
-          self.score += merged.value;
+          self.score += merged.value.length;
 
           // The mighty 2048 tile
           if (merged.value === 2048) self.won = true;
@@ -304,7 +304,7 @@ GameManager.prototype.tileMatchesAvailable = function () {
 
           var other  = self.grid.cellContent(cell);
 
-          if (other && other.value === tile.value) {
+          if (other && getWord(buildAlphabet(tile, other))) {
             return true; // These two tiles can be merged
           }
         }
