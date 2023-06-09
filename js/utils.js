@@ -64,6 +64,7 @@ fetch('https://cdn.jasonxu.dev/64837ed1e288cb2af31a6572')
 				DEFINITIONS[word] = def;
 			});
 			buildTree();
+			start();
 		}
 	});
 

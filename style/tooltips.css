@@ -232,3 +232,18 @@
 	}
 }
 
+#loading {
+	position: fixed;
+	width: 100vw;
+	height: 100vh;
+	top: 0;
+	left: 0;
+	backdrop-filter: blur(4px);
+	z-index: 999;
+	pointer-events: none;
+	text-align: center;
+	font-size: 48px;
+	line-height: 1.5em;
+	padding-top: calc(50vh - 0.75em);
+}
+
