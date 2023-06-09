@@ -1,6 +1,7 @@
 let ALPHABET = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'];
 let DICTIONARY = null;
 let DICT_TREE = null;
+let DEFINITIONS = {};
 
 // Merge the alphabets of 2 tiles or a single string
 function buildAlphabet(a, b) {
@@ -162,5 +163,17 @@ function getWord(alphabet) {
 	}
 
 	return null;
+}
+
+function getDefinition(word) {
+	if (word in DEFINITIONS) {
+		return Promise.resolve(DEFINITIONS[word]);
+	} else {
+		return fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${word}`)
+			.then((res) => res.json())
+			.then((data) => (DEFINITIONS[word] = data[0].meanings[0].definitions[0].definition))
+			.catch(() => (DEFINITIONS[word] = 'Definition unavailable'))
+			.finally(() => DEFINITIONS[word]);
+	}
 }
 
