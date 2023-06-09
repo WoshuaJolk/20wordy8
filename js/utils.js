@@ -46,11 +46,23 @@ function buildAlphabet(a, b) {
 	}
 }
 
-fetch('https://raw.githubusercontent.com/words/an-array-of-english-words/master/index.json')
-	.then((res) => res.json())
+fetch('https://cdn.jasonxu.dev/64837ed1e288cb2af31a6572')
+	.then((res) => res.text())
 	.then((data) => {
 		if (DICTIONARY === null) {
-			DICTIONARY = data;
+			const words = data
+				.replace(/\r/g, '')
+				.split('\n')
+				.map((str) => {
+					const [word, def] = str.split('\t');
+
+					return [word.toLowerCase(), def];
+				});
+
+			DICTIONARY = words.map(([word]) => word);
+			words.forEach(([word, def]) => {
+				DEFINITIONS[word] = def;
+			});
 			buildTree();
 		}
 	});
