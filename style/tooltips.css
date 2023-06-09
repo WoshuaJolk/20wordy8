@@ -243,5 +243,24 @@
 	font-size: 48px;
 	line-height: 1.5em;
 	padding-top: calc(50vh - 0.75em);
+	animation: bounce 1.5s linear forwards infinite;
+}
+
+@keyframes bounce {
+	0% {
+		transform: translateY(0);
+	}
+
+	25% {
+		transform: translateY(-12.5px);
+	}
+
+	75% {
+		transform: translateY(12.5px);
+	}
+
+	100% {
+		transform: translateY(0);
+	}
 }
 
