@@ -172,7 +172,7 @@ function getDefinition(word) {
 		return fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${word}`)
 			.then((res) => res.json())
 			.then((data) => (DEFINITIONS[word] = data[0].meanings[0].definitions[0].definition))
-			.catch(() => (DEFINITIONS[word] = 'Definition unavailable'))
+			.catch(() => (DEFINITIONS[word] = 'idk sry :('))
 			.finally(() => DEFINITIONS[word]);
 	}
 }
