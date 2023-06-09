@@ -57,9 +57,9 @@ HTMLActuator.prototype.addTile = function (tile) {
   getDefinition(tile.value).then((def) => (wrapper.dataset.tooltip = def));
 
   // We can't use classlist because it somehow glitches when replacing classes
-  var classes = ["tile", "tile-" + tile.value, positionClass];
+  var classes = ["tile", "tile-" + tile.value.length, positionClass];
 
-  if (tile.value > 2048) classes.push("tile-super");
+  if (tile.value.length > 11) classes.push("tile-super");
 
   this.applyClasses(wrapper, classes);
 
