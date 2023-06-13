@@ -6,5 +6,17 @@
 function start() {
 	document.querySelector('#loading').remove();
 	new GameManager(4, KeyboardInputManager, HTMLActuator, LocalStorageManager);
+
+	window.addEventListener('touchstart', (evt) => {
+		for (let i = 0; i < evt.touches.length; i++) {
+			const touch = evt.touches.item(i);
+
+			if (touch !== null) {
+				const { target } = touch;
+
+				target.focus();
+			}
+		}
+	});
 }
 
