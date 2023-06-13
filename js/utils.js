@@ -1,7 +1,8 @@
 let ALPHABET = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'];
-let DICTIONARY = null;
-let DICT_TREE = null;
+let DICTIONARY = null,
+	DICT_TREE = null;
 let DEFINITIONS = {};
+let definitionsLoaded = false;
 
 // Merge the alphabets of 2 tiles or a single string
 function buildAlphabet(a, b) {
@@ -47,23 +48,41 @@ function buildAlphabet(a, b) {
 }
 
 fetch('https://cdn.jasonxu.dev/64837ed1e288cb2af31a6572')
-	.then((res) => res.text())
+	.then((res) => (console.time('fetching'), res.text()))
+	.then((data) => {
+		console.timeEnd('fetching');
+		console.time('parsing');
+		const words = data
+			.replace(/\r/g, '')
+			.split('\n')
+			.map((str) => {
+				const [word, def] = str.split('\t');
+
+				return [word.toLowerCase(), def];
+			});
+		console.timeEnd('parsing');
+
+		words.forEach(([word, def]) => {
+			DEFINITIONS[word] = def;
+		});
+		definitionsLoaded = true;
+	});
+
+fetch('https://cdn.jasonxu.dev/6487c069e288cb2af31a6573')
+	.then((res) => (console.time('fetching words only'), res.text()))
 	.then((data) => {
 		if (DICTIONARY === null) {
-			const words = data
+			console.timeEnd('fetching words only');
+			console.time('parsing');
+			DICTIONARY = data
 				.replace(/\r/g, '')
 				.split('\n')
-				.map((str) => {
-					const [word, def] = str.split('\t');
+				.map((word) => word.toLowerCase());
+			console.timeEnd('parsing');
 
-					return [word.toLowerCase(), def];
-				});
-
-			DICTIONARY = words.map(([word]) => word);
-			words.forEach(([word, def]) => {
-				DEFINITIONS[word] = def;
-			});
+			console.time('building tree');
 			buildTree();
+			console.timeEnd('building tree');
 			start();
 		}
 	});
@@ -179,6 +198,10 @@ function getWord(alphabet) {
 }
 
 function getDefinition(word) {
+	if (!definitionsLoaded) {
+		return Promise.resolve('Definitions are not loaded yet...');
+	}
+
 	if (word in DEFINITIONS) {
 		return Promise.resolve(DEFINITIONS[word]);
 	} else {
